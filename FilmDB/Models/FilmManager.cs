@@ -39,6 +39,15 @@ namespace FilmDB.Models
 
         public FilmManager ChangeTitle(int id, string newTitle)
         {
+            var film = context.Films.Where(x => x.Id == id).FirstOrDefault();
+            if(film != null)
+            {
+                film.Title = newTitle;
+                var entity = context.Films.Attach(film);
+                entity.State = EntityState.Modified;
+                context.SaveChanges();
+
+            }
             return this;
         }
 

@@ -89,8 +89,30 @@ namespace FilmDB.Controllers
             filmManager.RemoveFilm(id);
             return RedirectToAction("Index");
         }
-    
 
+        [HttpGet]
+        public ActionResult ChangeTitle(int id, string newTitle)
+        {
+            var model = filmManager.GetFilm(id);
+            if (model == null)
+            {
+                return View("NotFound");
+            }
+            return View(model);
+        }
 
-}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangeTitle(FilmModel film)
+        {
+            if (ModelState.IsValid)
+            {
+                filmManager.UpdateFilm(film);
+                TempData["Message"] = "Film title updated!";
+                return RedirectToAction("Details", new { id = film.Id });
+            }
+            return View(film);
+        }
+
+    }
 }
