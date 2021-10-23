@@ -1,7 +1,16 @@
+using FilmDB.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Configuration;
+using Microsoft.Extensions.Configuration;
+
+
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<FilmContext>(x => x.UseSqlServer(connectionString));
+builder.Services.AddScoped<IFilmManager, FilmManager>();
 
 var app = builder.Build();
 
